@@ -45,11 +45,12 @@ public class TesterQ04 {
             obj[i] = new Smartphone(phone[i] , price[i]);
         }
         
-        obj = first.compare(obj);
+        double [] ordered_price = new double[4];
+        ordered_price = first.compare(price);
         
         System.out.println("\nList of the SmartPhones in ascending order : ");
         for(int i=0 ; i<4 ; i++){
-            obj[i].display();
+            System.out.print(phone[i] + " (RM" + ordered_price[i] + "), ");
         }
     }
     }

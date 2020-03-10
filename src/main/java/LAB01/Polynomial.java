@@ -14,26 +14,21 @@ import java.text.DecimalFormat;
  */
 public class Polynomial {
     
-    private static int degree;
-    private static double coefficient;
-    private static double total=0;
+    private int degree;
+    private double coefficient;
+    private static double ans=0.0;
     
-    public Polynomial(int degree,double coefficient){
+    public Polynomial(int degree, double coefficient){
         this.degree=degree;
         this.coefficient=coefficient;
     }
     
-    public static void calTotal(double x){
-        total = total + coefficient*(pow(x,degree));
+    public void Answer(double x){
+        ans = ans + coefficient*(pow(x,degree));
     }
     
-    public static double getTotal(){
-        return total;
+    public static double getAnswer(){
+        return ans;
     }
     
-    public String toString(){
-        DecimalFormat co = new DecimalFormat("#.#");
-        String str = co.format(coefficient);
-        return str+"x^"+degree;
-    }
 }

@@ -19,22 +19,21 @@ public class Smartphone implements Comparable{
         this.price = price;
     }
 
-    public double getPrice() {
+    public double getPrice(double price) {
         return price;
     }
   
    
     @Override
-    public Smartphone[] compare(Smartphone[] a){
+    public double[] compare(double[] a){
        
         int check = 1; 
-        Smartphone temp;
+        double temp;
         
-        if(a instanceof Smartphone[])
         while(check != 0){
             check = 0;
             for(int i=0 ; i<3 ; i++){
-                if(a[i].getPrice()>a[i+1].getPrice()){
+                if(getPrice(a[i])>getPrice(a[i+1])){
                     temp = a[i];
                     a[i] = a[i+1];
                     a[i+1] = temp;

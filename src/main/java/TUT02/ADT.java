@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package TUT01;
+package TUT02;
 
 /**
  *
  * @author Owner
  */
-public interface Comparable {
-    public double[] compare(double[] a);
+public interface ADT<T> {
+   
+    public String toString();
+    public void roll();
+    
 }
