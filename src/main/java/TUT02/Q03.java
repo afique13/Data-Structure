@@ -29,7 +29,7 @@ public class Q03 {
             //returns positive integer if a is larger than b
             d=a;
         else 
-            //returns negative integer if a is smallee than a
+            //returns negative integer if a is smaller than a
             d=b;
                     
         if(c.compareTo(d)>0)
