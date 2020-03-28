@@ -40,6 +40,7 @@ public class ListNode<T> {
         return link;
     }
     
+    @Override
     public String toString(){
         return data +"--> ";
     }

@@ -23,13 +23,32 @@ public class Q03 {
         Scanner a = new Scanner(System.in);
         int amount = a.nextInt();
         System.out.println("Total amount: "+amount);
-        money.addNode(100);
-        money.addNode(50);
-        money.addNode(20);
-        money.addNode(10);
-        money.addNode(5);
-        money.addNode(1);
+        int [] notes = {100,50,20,10,5,1};
+        int [] arr = new int[6];
         
+        LinkedList<Integer> obj1 = new LinkedList<>();
+        LinkedList<Integer> obj2 = new LinkedList<>();
+        
+        for(int i=0;i<arr.length;i++){
+            obj1.addNode(notes[i]);
+        }
+        arr = noNotes(amount,arr,obj1);
+        for(int i=0;i<arr.length;i++){
+            obj2.addNode(arr[i]);
+        }
+        
+        for(int i=0;i<arr.length;i++){
+            System.out.println("MYR "+obj1.get(i)+" : "+obj2.get(i));
+        }
+    }
+    
+    public static int[] noNotes(int amount,int[] arr,LinkedList<Integer> obj1){
+        for(int i=0;i<arr.length;i++){
+            arr[i] = amount/obj1.get(i);
+            amount = amount - (obj1.get(i)*arr[i]);
+        }
+        
+        return arr;
     }
     
 }
