@@ -110,6 +110,18 @@ public class LinkedList <T extends Comparable<T>> {
             System.out.println("User input is not in the linked list");
     }
     
+    public void deleteFromNode(int node){
+        ListNode currentNode = head;
+        int count=0;
+        while(currentNode!=null){
+            if(count>=node){
+                currentNode.setData(null);
+            }
+            count++;
+            currentNode = currentNode.getLink();
+        }
+    }
+    
     public void randomNode(){
         Random read = new Random();
         int a = read.nextInt(21);
@@ -129,12 +141,67 @@ public class LinkedList <T extends Comparable<T>> {
         head = new ListNode(a,head);
     }
     
-    public void addFromFront(T a){
-        
+    public void SortNode(T a){
+        ListNode newNode = new ListNode(a,null);
+        boolean check=false;
+        if(head==null){
+            addNode(a);
+        }else{
+            T currentNodeData = (T) head.getData();
+            if(a.compareTo(currentNodeData)<0)
+                addFrontNode(a);
+            else{
+                ListNode currentNode = head;
+             if(currentNode.getLink()!=null){   
+        while(currentNode.getLink()!=null){        
+                if(a.compareTo((T)currentNode.getLink().getData())<0){
+                    ListNode lowerNode = new ListNode(a,currentNode.getLink());
+                    currentNode.setLink(lowerNode);
+                    check = true;
+                    break;
+                }else{
+                    currentNode=currentNode.getLink();
+                }
+        }
+            }
+             if(check==false)
+                    currentNode.setLink(newNode);
+            }
+        }
     }
     
-   public void sortList(){
-       
-   }
-       
+    // munir's method
+    public void addSortNode(T t) { 
+        if (head == null) { //if there's nothing on the linked
+            addNode(t);
+        } else {
+            T currentNodeData = (T) head.getData();
+            if (t.compareTo(currentNodeData) < 0) {
+                addFrontNode(t);
+            } else {
+                ListNode currentNode = head;
+                T number;
+                while (true) {
+                    //System.out.println(t + " " + number);
+                    if(currentNode.getLink() != null) {
+                        if (t.compareTo((T)currentNode.getLink().getData()) < 0) {
+                            ListNode newNode = new ListNode(t, currentNode.getLink());
+                            currentNode.setLink(newNode);
+                            break;
+                        } else { // move to the next node
+                            currentNode = currentNode.getLink();
+                            number = (T) currentNode.getData();
+                        }
+                    } else { // add to the last element
+                        ListNode newNode;
+                        newNode = new ListNode(t, null);
+                        currentNode.setLink(newNode);
+                        break;
+                    }
+
+                }
+
+            }
+        }
+    }
 }
