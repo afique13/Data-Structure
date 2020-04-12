@@ -6,6 +6,7 @@
 package LAB04;
 
 import TUT04.*;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -93,33 +94,54 @@ public class LinkedList <T extends Comparable<T>> {
         return count;
     }
     
-    public void deleteNode(T num){
+    public void deleteSpecificNode(T element){
         ListNode currentNode = head;
-        boolean check = false;
-        while(currentNode!=null){
-            if(currentNode.getData()==num){
-                check=true;
-                System.out.println(num+" has been deleted");
-                currentNode.setData(null);
+        ListNode previousNode = head;
+        while(currentNode.getLink()!=null){
+            if(currentNode.getData().equals(element)){
+                previousNode.setLink(currentNode.getLink());
                 break;
             }
+            previousNode = currentNode;
             currentNode = currentNode.getLink();
         }
         
-        if(check==false)
-            System.out.println("User input is not in the linked list");
     }
     
     public void deleteFromNode(int node){
         ListNode currentNode = head;
-        int count=0;
+        int count=1;
         while(currentNode!=null){
-            if(count>=node){
-                currentNode.setData(null);
+            if(count>=node-1){
+                currentNode.setLink(null);
             }
             count++;
             currentNode = currentNode.getLink();
         }
+    }
+    
+     public void deleteNode() {
+        ListNode currentNode = head;
+        ListNode previousNode = head;
+        if (head != null) {
+            if (currentNode.getLink() == null) {
+                head = null;
+            } else {
+                while (currentNode.getLink() != null) {
+                    previousNode = currentNode;
+                    currentNode = currentNode.getLink();
+                }
+                previousNode.setLink(null);
+            }
+        } else {
+            System.out.println("List is empty");
+        }
+    }
+    
+    public void deleteFrontNode(){
+        if(head!=null)
+            head=head.getLink();
+        // Essentially replaces the front node with the adjacent node
     }
     
     public void randomNode(){
@@ -203,5 +225,59 @@ public class LinkedList <T extends Comparable<T>> {
 
             }
         }
+    }
+    
+    public void removeAtIndex(int index){
+          if (index >= Length() || index < 0 || head == null) {
+            return;
+        } else if (index == 0) {
+            deleteFrontNode();
+        } else if (index == Length()-1) {
+            deleteNode();
+        } else {
+            int count = 0;
+            ListNode currentNode = head;
+            while (currentNode.getLink() != null) {
+                if (count == index - 1) {
+                    break;
+                } else {
+                    currentNode = currentNode.getLink();
+                    count++;
+                }
+            }
+            ListNode tempNode = currentNode.getLink();
+            currentNode.setLink(tempNode.getLink());
+        }
+    }
+    
+    public LinkedListIterator listIterator() {
+        return new LinkedListIterator();
+        //keyword "new" is used to create a new object
+    }
+    
+    private class LinkedListIterator<T> implements Iterator<T>{
+
+       private ListNode<T> currentNode = head;
+        private int count = -1;
+
+        @Override
+        public boolean hasNext() {
+            count++;
+            return currentNode != null;
+        }
+
+        @Override
+        public T next() {
+            T data = (T) currentNode.getData();
+            currentNode = currentNode.getLink();
+            return data;
+        }
+
+        @Override
+        public void remove() {
+            removeAtIndex(count);
+            count--;
+        }
+        
     }
 }
