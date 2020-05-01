@@ -141,7 +141,7 @@ public class LinkedList <T extends Comparable<T>> {
     public void deleteFrontNode(){
         if(head!=null)
             head=head.getLink();
-        // Essentially replaces the front node with the adjacent node
+        // Replaces the front node with the adjacent node
     }
     
     public void randomNode(){
@@ -248,6 +248,33 @@ public class LinkedList <T extends Comparable<T>> {
             ListNode tempNode = currentNode.getLink();
             currentNode.setLink(tempNode.getLink());
         }
+    }
+    
+    public void splitList(){
+        ListNode currentNode = head;
+        LinkedList sec_list = new LinkedList<>();
+        int index,count=0;
+        if(Length()%2==0)
+            index = Length()/2;
+        else
+            index = Length()/2 +1;
+        
+        while(currentNode!=null){
+            if(count>=index-1){
+                sec_list.addNode((T)currentNode.getData());
+            }
+            currentNode = currentNode.getLink();
+            count++;
+        }
+        deleteFromNode(index);
+        System.out.print("First List : ");
+        showlist();
+        System.out.print("Second list : ");
+        sec_list.showlist();
+    }
+    
+    public void alternateNodes(){
+        
     }
     
     public LinkedListIterator listIterator() {
