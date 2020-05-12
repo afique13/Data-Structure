@@ -35,6 +35,23 @@ public class Q06 {
         for(int i=0;i<random.length;i++){
             if(i==0)
                 rando.push(random[i]);
+            else if(i%2!=0){
+                for(int j=1;j<random.length;j++){
+                    if(random[j]%2==0&&random[j]!=-1){
+                        rando.push(random[j]);
+                        random[j]=-1;
+                        break;
+                    }
+                }
+            }else if(i%2==0){
+                for(int j=1;j<random.length;j++){
+                    if(random[j]%2!=0&&random[j]!=-1){
+                        rando.push(random[j]);
+                        random[j]=-1;
+                        break;
+                    }
+                }
+            }
         }
         
         System.out.print("\nThe numbers in the stack : ");
