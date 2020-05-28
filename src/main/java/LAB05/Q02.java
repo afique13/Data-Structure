@@ -18,74 +18,17 @@ public class Q02 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Scanner scanner = new Scanner(System.in);
         System.out.print("Enter infix expression : ");
-        Scanner a = new Scanner(System.in);
-        String input = a.nextLine();
-        System.out.println("The infix expression is: "+inputToInfix(input));
-        String infix = inputToInfix(input);
-        System.out.println("The postfix expression is: "+infixToPostfix(infix));
-        String postfix = infixToPostfix(infix);
-        System.out.println("The result is: "+postfixEvaluation(postfix));
+        String infix = scanner.nextLine();
+        System.out.println("The infix expression is: " + toSymbol(infix));
+        infix = toSymbol(infix);
+        System.out.println("The postfix expression is: " + infixToPostfix(infix));
+        infix = infixToPostfix(infix);
+        countPostfixExpression(infix);
     }
     
-    public static String infixToPostfix(String a){
-        String str="";
-        char c = ' ';
-        Stack<Character> stack = new Stack<>();
-        for(int i=0;i<a.length();i++){
-            if(Character.isLetterOrDigit(a.charAt(i)))
-                str += a.charAt(i);
-            else if(a.charAt(i)=='(')
-                stack.push(a.charAt(i));
-            else if(a.charAt(i)==')'){
-                c = stack.pop();
-                while(c!='('){
-                    str+=c;
-                    c= stack.pop();
-                }
-            }else{
-                if(!stack.isEmpty()){
-                    if(stack.peek()=='(')
-                        stack.push(a.charAt(i));
-                    else{
-                        c = stack.peek();
-                        while(getPriority(a.charAt(i)) <= getPriority(c)){
-                            str+=stack.pop();
-                            if(!stack.isEmpty()){
-                                c = stack.peek();
-                                if(c=='(')
-                                    break;
-                            }else
-                                break;
-                        }
-                        stack.push(a.charAt(i));
-                    }
-                }else
-                    stack.push(a.charAt(i));
-            }
-        }
-        while(!stack.isEmpty())
-            str+=stack.pop();
-        
-        return str;
-    }
-    
-    
-    public static int getPriority(char a){
-        switch(a){
-                case '*':
-                case '/':
-                case '%':
-                    return 2;
-                case '+':
-                case '-':
-                    return 1;
-                default:
-                    return 0;
-        }
-    }
-    
-    public static String inputToInfix(String expression){
+    public static String toSymbol(String expression) {
         String newExpression = expression;
         newExpression = newExpression.replace("mul", "*");
         newExpression = newExpression.replace("add", "+");
@@ -94,58 +37,91 @@ public class Q02 {
         newExpression = newExpression.replace("mod", "%");
         newExpression = newExpression.replace("ob", "(");
         newExpression = newExpression.replace("cb", ")");
-        return newExpression; 
+        return newExpression;
     }
     
-    public static int postfixEvaluation(String a){
-        Stack<String> stack = new Stack<>();
-        String temp;
-        int num1=0, num2=0, result=0;
-        for(int i=0;i<a.length();i++){
-            if(Character.isLetterOrDigit(a.charAt(i))){
-                temp = a.substring(i,i+1);
-                stack.push(temp);
-            }else{
-                num2 = Integer.parseInt(stack.pop());
-                num1 = Integer.parseInt(stack.pop());
-                result = getResult(num1, num2, a.charAt(i));
-                stack.push(result+"");
+    public static String infixToPostfix(String expression) {
+        String newExpression = "";
+        Stack<String> operator = new Stack<>();
+        String[] split = expression.split(" ");
+        for (int i = 0; i < split.length; i++) {
+            String c = split[i];
+            if (!isAnOperator(c)) { // its an operand
+                newExpression += c + " ";
+            } else { // its an operator
+                if (operator.isEmpty() || getOperatorPrecedence(c) > getOperatorPrecedence(operator.peek()) || operator.peek().contentEquals("(")) {
+                    operator.push(c);
+                } else {
+                    if (!ifParenthesis(c)) {
+                        while (!operator.isEmpty() && getOperatorPrecedence(c) <= getOperatorPrecedence(operator.peek())) {
+                            if (operator.peek().contentEquals("(") || operator.peek().contentEquals(")")) break;
+                            newExpression += operator.pop() + " ";
+                        }
+                        operator.push(c);
+                    } else { //if got parentheses
+                        if (c.contentEquals("(")) {
+                            operator.push(c);
+                        } else { // close bracket )
+                            while (!operator.peek().contentEquals("(")) {
+                                newExpression += operator.pop() + " ";
+                            }
+                            operator.pop();
+                        }
+                    }
+                }
             }
         }
-        result = Integer.parseInt(stack.pop());
-        return result;
+        while (!operator.isEmpty()) newExpression += operator.pop() + " ";
+        return newExpression;
     }
     
-    public static int getResult(int a,int b,char c){
-        switch(c){
-            case '+':
-                return a+b;
-            case '-':
-                return a-b;
-            case '*':
-                return a*b;
-            case '/':
-                return a/b;
-            case '%':
-                return a%b;
-        }
-        return 0;
-    }
-
-    private boolean ifParenthesis(String c) {
-        if (c.contentEquals("(") || c.contentEquals(")")) return true;
-        return false;
-    }
-
-    private int getOperatorPrecedence(String c) {
-       if (c.contentEquals("*") || c.contentEquals("/") || c.contentEquals("%")) return 1;
-        return 0;
-    }
-
-    private boolean isAnOperator(String c) {
-       if (c.contentEquals("+") || c.contentEquals("-") ||
+    public static boolean isAnOperator(String c) {
+        if (c.contentEquals("+") || c.contentEquals("-") ||
                 c.contentEquals("*") || c.contentEquals("/") ||
                 c.contentEquals("%") || c.contentEquals("(") || c.contentEquals(")")) return true;
         return false;
+    }
+    
+    public static int getOperatorPrecedence(String c) {
+        if (c.contentEquals("*") || c.contentEquals("/") || c.contentEquals("%")) return 1;
+        return 0;
+    }
+
+    public static boolean ifParenthesis(String c) {
+        if (c.contentEquals("(") || c.contentEquals(")")) return true;
+        return false;
+    }
+    
+    public static void countPostfixExpression(String expression) {
+        int value;
+        Stack<String> stack = new Stack<>();
+        String[] split = expression.split(" ");
+        for (int i = 0; i < split.length; i++) {
+            stack.push(split[i]);
+            if (isAnOperator(split[i])) {
+                String newCharacter = evaluate(stack.pop(), stack.pop(), stack.pop());
+                stack.push(newCharacter);
+            }
+        }
+        value = Integer.valueOf(stack.pop());
+        System.out.println("The result is: " + value);
+    }
+    
+    public static String evaluate(String operator, String operand2, String operand1) {
+        int finalValue = 0;
+        int value1 = Integer.valueOf(operand1);
+        int value2 = Integer.valueOf(operand2);
+        if (operator.contentEquals("+")) {
+            finalValue = value1 + value2;
+        } else if (operator.contentEquals("-")) {
+            finalValue = value1 - value2;
+        } else if (operator.contentEquals("*")) {
+            finalValue = value1 * value2;
+        } else if (operator.contentEquals("/")) {
+            finalValue = value1 / value2;
+        } else if (operator.contentEquals("%")) {
+            finalValue = value1 % value2;
+        }
+        return String.valueOf(finalValue);
     }
 }

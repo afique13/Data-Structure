@@ -1,0 +1,7 @@
+Contents of XML file
+<note>
+<test>Sample</test>
+<p>Hello</p>
+</note>Data<note>
+</note>
+
